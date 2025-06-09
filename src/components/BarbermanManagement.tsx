@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Plus, Edit, Eye, Trash2, User } from 'lucide-react';
+import { Plus, Edit, Eye, Trash2, User, Scissors, Users, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Table,
