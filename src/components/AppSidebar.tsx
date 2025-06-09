@@ -29,6 +29,7 @@ const menuItems = [
   { title: 'Point of Sale', url: '/pos', icon: ShoppingCart },
   { title: 'Manajemen Cabang', url: '/branches', icon: Building },
   { title: 'Manajemen User', url: '/users', icon: Users },
+  { title: 'Barberman', url: '/barberman', icon: Scissors },
   { title: 'Produk & Layanan', url: '/products', icon: Package },
   { title: 'Laporan', url: '/reports', icon: FileText },
 ];

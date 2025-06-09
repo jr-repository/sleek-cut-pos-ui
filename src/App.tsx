@@ -10,6 +10,7 @@ import Layout from "./components/Layout";
 import Dashboard from "./components/Dashboard";
 import BranchManagement from "./components/BranchManagement";
 import UserManagement from "./components/UserManagement";
+import BarbermanManagement from "./components/BarbermanManagement";
 import ProductManagement from "./components/ProductManagement";
 import POSPage from "./components/POSPage";
 import Reports from "./components/Reports";
@@ -62,6 +63,7 @@ const App = () => {
               <Route path="pos" element={<POSPage />} />
               <Route path="branches" element={<BranchManagement />} />
               <Route path="users" element={<UserManagement />} />
+              <Route path="barberman" element={<BarbermanManagement />} />
               <Route path="products" element={<ProductManagement />} />
               <Route path="reports" element={<Reports />} />
               <Route path="*" element={<NotFound />} />
