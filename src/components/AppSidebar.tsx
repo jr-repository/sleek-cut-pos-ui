@@ -42,10 +42,14 @@ export function AppSidebar() {
   const isCollapsed = state === 'collapsed';
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-border">
-      <SidebarContent>
+    <Sidebar 
+      collapsible="icon" 
+      className="border-r border-border bg-sidebar text-sidebar-foreground"
+      variant="sidebar"
+    >
+      <SidebarContent className="bg-sidebar">
         {/* Brand */}
-        <div className="p-4 border-b border-border">
+        <div className="p-4 border-b border-border bg-sidebar">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center flex-shrink-0">
               <Scissors className="h-4 w-4 text-white" />
@@ -59,25 +63,30 @@ export function AppSidebar() {
           </div>
         </div>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Menu Utama</SidebarGroupLabel>
+        <SidebarGroup className="px-2 py-4">
+          <SidebarGroupLabel className="text-sidebar-foreground/70 mb-2">
+            {!isCollapsed ? 'Menu Utama' : ''}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="space-y-1">
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton 
+                    asChild 
+                    className={`w-full justify-start gap-3 h-10 px-3 transition-all duration-200 ${
+                      isActive(item.url) 
+                        ? 'bg-primary text-primary-foreground font-medium shadow-sm' 
+                        : 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sidebar-foreground'
+                    }`}
+                  >
                     <NavLink 
                       to={item.url} 
-                      className={({ isActive }) => 
-                        `flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
-                          isActive 
-                            ? 'bg-primary text-primary-foreground font-medium' 
-                            : 'hover:bg-accent hover:text-accent-foreground'
-                        }`
-                      }
+                      className="flex items-center gap-3 w-full"
                     >
                       <item.icon className="h-4 w-4 flex-shrink-0" />
-                      {!isCollapsed && <span className="truncate">{item.title}</span>}
+                      {!isCollapsed && (
+                        <span className="truncate text-sm">{item.title}</span>
+                      )}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
