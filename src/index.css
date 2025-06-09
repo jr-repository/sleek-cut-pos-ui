@@ -16,7 +16,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 47 100% 50%;
+    --primary: 210 100% 51%;
     --primary-foreground: 222.2 84% 4.9%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -25,7 +25,7 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 47 100% 50%;
+    --accent: 210 100% 51%;
     --accent-foreground: 222.2 84% 4.9%;
 
     --destructive: 0 62.8% 30.6%;
@@ -33,22 +33,23 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 47 100% 50%;
+    --ring: 210 100% 51%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 222.2 84% 4.9%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 47 100% 50%;
+    --sidebar-primary: 210 100% 51%;
     --sidebar-primary-foreground: 222.2 84% 4.9%;
     --sidebar-accent: 217.2 32.6% 17.5%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 217.2 32.6% 17.5%;
-    --sidebar-ring: 47 100% 50%;
+    --sidebar-ring: 210 100% 51%;
 
-    /* Custom barbershop colors */
-    --barbershop-gold: 47 100% 50%;
-    --barbershop-gold-hover: 45 100% 45%;
+    /* Custom barbershop colors with new gradient */
+    --barbershop-gradient-start: 210 100% 51%;
+    --barbershop-gradient-middle: 263 69% 52%;
+    --barbershop-gradient-end: 0 100% 55%;
     --barbershop-dark: 222.2 84% 4.9%;
     --barbershop-gray: 217.2 32.6% 17.5%;
     --barbershop-light-gray: 215 20.2% 65.1%;
@@ -67,8 +68,19 @@
     background: linear-gradient(135deg, hsl(var(--barbershop-dark)) 0%, hsl(var(--barbershop-gray)) 100%);
   }
 
-  .gold-gradient {
-    background: linear-gradient(135deg, hsl(var(--barbershop-gold)) 0%, hsl(var(--barbershop-gold-hover)) 100%);
+  .gradient-primary {
+    background: linear-gradient(135deg, #05b2fd 0%, #6f42c1 50%, #ff1a1a 100%);
+  }
+
+  .gradient-primary-hover {
+    background: linear-gradient(135deg, #0399e5 0%, #5a359a 50%, #e61717 100%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #05b2fd 0%, #6f42c1 50%, #ff1a1a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   /* Custom animations */
@@ -102,6 +114,19 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--barbershop-gold));
+    background: #05b2fd;
+  }
+
+  /* Responsive utilities */
+  .responsive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .responsive-grid {
+      grid-template-columns: 1fr;
+    }
   }
 }
