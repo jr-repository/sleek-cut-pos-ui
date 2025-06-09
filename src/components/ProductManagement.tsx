@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Edit, Trash, Package, Scissors } from 'lucide-react';
+import { Plus, Edit, Trash, Package, Scissors, Clock, Star } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -399,49 +398,23 @@ const ProductManagement = () => {
             </Card>
           </div>
 
-          {/* Products Table */}
+          {/* Products Grid */}
           <Card>
             <CardHeader>
               <CardTitle>Daftar Produk</CardTitle>
               <CardDescription>Kelola semua produk barbershop</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nama Produk</TableHead>
-                    <TableHead>Kategori</TableHead>
-                    <TableHead>Harga</TableHead>
-                    <TableHead>Stok</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {products.map((product) => (
-                    <TableRow key={product.id}>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{product.name}</p>
-                          <p className="text-sm text-muted-foreground">{product.description}</p>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {products.map((product) => (
+                  <Card key={product.id} className="relative">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{product.name}</CardTitle>
+                          <Badge variant="outline" className="mt-1">{product.category}</Badge>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{product.category}</Badge>
-                      </TableCell>
-                      <TableCell className="font-medium">{formatCurrency(product.price)}</TableCell>
-                      <TableCell>
-                        <Badge variant={product.stock < 10 ? 'destructive' : 'default'}>
-                          {product.stock}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={product.status === 'available' ? 'default' : 'secondary'}>
-                          {product.status === 'available' ? 'Tersedia' : 'Tidak Tersedia'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1">
                           <Button 
                             size="sm" 
                             variant="outline" 
@@ -457,11 +430,32 @@ const ProductManagement = () => {
                             <Trash className="h-3 w-3" />
                           </Button>
                         </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-muted-foreground">{product.description}</p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xl font-bold">{formatCurrency(product.price)}</p>
+                          <p className="text-sm text-muted-foreground">Harga</p>
+                        </div>
+                        <div className="text-right">
+                          <Badge variant={product.stock < 10 ? 'destructive' : 'default'}>
+                            Stok: {product.stock}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-2 border-t">
+                        <Badge variant={product.status === 'available' ? 'default' : 'secondary'}>
+                          {product.status === 'available' ? 'Tersedia' : 'Tidak Tersedia'}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -514,45 +508,23 @@ const ProductManagement = () => {
             </Card>
           </div>
 
-          {/* Services Table */}
+          {/* Services Grid */}
           <Card>
             <CardHeader>
               <CardTitle>Daftar Layanan</CardTitle>
               <CardDescription>Kelola semua layanan barbershop</CardDescription>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nama Layanan</TableHead>
-                    <TableHead>Kategori</TableHead>
-                    <TableHead>Harga</TableHead>
-                    <TableHead>Durasi</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {services.map((service) => (
-                    <TableRow key={service.id}>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{service.name}</p>
-                          <p className="text-sm text-muted-foreground">{service.description}</p>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {services.map((service) => (
+                  <Card key={service.id} className="relative">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg">{service.name}</CardTitle>
+                          <Badge variant="outline" className="mt-1">{service.category}</Badge>
                         </div>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{service.category}</Badge>
-                      </TableCell>
-                      <TableCell className="font-medium">{formatCurrency(service.price)}</TableCell>
-                      <TableCell>{service.duration} menit</TableCell>
-                      <TableCell>
-                        <Badge variant={service.status === 'available' ? 'default' : 'secondary'}>
-                          {service.status === 'available' ? 'Tersedia' : 'Tidak Tersedia'}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1">
                           <Button 
                             size="sm" 
                             variant="outline" 
@@ -568,11 +540,31 @@ const ProductManagement = () => {
                             <Trash className="h-3 w-3" />
                           </Button>
                         </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-sm text-muted-foreground">{service.description}</p>
+                      
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xl font-bold">{formatCurrency(service.price)}</p>
+                          <p className="text-sm text-muted-foreground">Harga</p>
+                        </div>
+                        <div className="text-right flex items-center gap-1">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">{service.duration} min</span>
+                        </div>
+                      </div>
+                      
+                      <div className="pt-2 border-t">
+                        <Badge variant={service.status === 'available' ? 'default' : 'secondary'}>
+                          {service.status === 'available' ? 'Tersedia' : 'Tidak Tersedia'}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

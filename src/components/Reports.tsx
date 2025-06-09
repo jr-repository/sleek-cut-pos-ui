@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Plus, FileText, TrendingUp, DollarSign, Users, Calendar } from 'lucide-react';
+import { Plus, FileText, TrendingUp, DollarSign, Users, Calendar, Download } from 'lucide-react';
 
 interface Sale {
   id: number;
@@ -173,6 +172,134 @@ const Reports = () => {
     setIsExpenseDialogOpen(false);
   };
 
+  const handleExportPDF = () => {
+    // Simple PDF export functionality
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Laporan Barbershop - ${new Date().toLocaleDateString('id-ID')}</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 20px; }
+              h1, h2 { color: #333; }
+              table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+              th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+              th { background-color: #f2f2f2; }
+              .summary { display: flex; justify-content: space-around; margin: 20px 0; }
+              .summary-item { text-align: center; padding: 10px; border: 1px solid #ddd; }
+              @media print { .no-print { display: none; } }
+            </style>
+          </head>
+          <body>
+            <div style="text-align: center; margin-bottom: 30px;">
+              <img src="/assets/image/logo.png" alt="Logo" style="height: 60px; margin-bottom: 10px;" />
+              <h1>Laporan Barbershop</h1>
+              <p>Periode: ${dateFrom} - ${dateTo}</p>
+            </div>
+            
+            <div class="summary">
+              <div class="summary-item">
+                <h3>Total Penjualan</h3>
+                <p style="font-size: 20px; font-weight: bold;">${formatCurrency(totalSales)}</p>
+              </div>
+              <div class="summary-item">
+                <h3>Total Pengeluaran</h3>
+                <p style="font-size: 20px; font-weight: bold;">${formatCurrency(totalExpenses)}</p>
+              </div>
+              <div class="summary-item">
+                <h3>Laba Bersih</h3>
+                <p style="font-size: 20px; font-weight: bold; color: ${netProfit >= 0 ? 'green' : 'red'};">${formatCurrency(netProfit)}</p>
+              </div>
+            </div>
+
+            <h2>Laporan Penjualan</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Customer</th>
+                  <th>Barberman</th>
+                  <th>Items</th>
+                  <th>Cabang</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${sales.map(sale => `
+                  <tr>
+                    <td>${sale.date}</td>
+                    <td>${sale.customer}</td>
+                    <td>${sale.barberman}</td>
+                    <td>${sale.items.join(', ')}</td>
+                    <td>${sale.branch}</td>
+                    <td>${formatCurrency(sale.total)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+
+            <h2>Laporan Pengeluaran</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th>
+                  <th>Deskripsi</th>
+                  <th>Kategori</th>
+                  <th>Cabang</th>
+                  <th>Jumlah</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${expenses.map(expense => `
+                  <tr>
+                    <td>${expense.date}</td>
+                    <td>${expense.description}</td>
+                    <td>${expense.category}</td>
+                    <td>${expense.branch}</td>
+                    <td>${formatCurrency(expense.amount)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+
+            <h2>Komisi Barberman</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Cabang</th>
+                  <th>Total Penjualan</th>
+                  <th>Komisi</th>
+                  <th>Jumlah Order</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${barberCommissions.map(barber => `
+                  <tr>
+                    <td>${barber.name}</td>
+                    <td>${barber.branch}</td>
+                    <td>${formatCurrency(barber.totalSales)}</td>
+                    <td>${formatCurrency(barber.commission)}</td>
+                    <td>${barber.orders}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+
+            <div style="margin-top: 30px; text-align: center; color: #666;">
+              <p>Laporan dibuat pada: ${new Date().toLocaleString('id-ID')}</p>
+            </div>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      setTimeout(() => {
+        printWindow.print();
+      }, 500);
+    }
+  };
+
   // Calculations
   const totalSales = sales.reduce((total, sale) => total + sale.total, 0);
   const totalExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
@@ -226,6 +353,11 @@ const Reports = () => {
           />
           
           <Button variant="outline">Filter</Button>
+          
+          <Button onClick={handleExportPDF}>
+            <Download className="h-4 w-4 mr-2" />
+            Export PDF
+          </Button>
         </div>
       </div>
 
