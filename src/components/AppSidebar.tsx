@@ -10,6 +10,8 @@ import {
   FileText,
   Home,
   Scissors,
+  Receipt,
+  CreditCard,
 } from 'lucide-react';
 
 import {
@@ -31,6 +33,8 @@ const menuItems = [
   { title: 'Manajemen User', url: '/users', icon: Users },
   { title: 'Barberman', url: '/barberman', icon: Scissors },
   { title: 'Produk & Layanan', url: '/products', icon: Package },
+  { title: 'Pengeluaran', url: '/expenses', icon: Receipt },
+  { title: 'Metode Pembayaran', url: '/payment-methods', icon: CreditCard },
   { title: 'Laporan', url: '/reports', icon: FileText },
 ];
 
