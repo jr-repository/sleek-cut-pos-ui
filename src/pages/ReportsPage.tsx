@@ -16,39 +16,75 @@ const ReportsPage: React.FC<ReportsPageProps> = ({ userRole, userBranchId }) => 
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Laporan</h1>
-        <p className="text-gray-600">Analisis performa dan laporan keuangan</p>
+    <div className="space-y-6 animate-fade-in">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-bold text-foreground">Laporan</h1>
+          <p className="text-muted-foreground mt-2">Analisis performa dan laporan keuangan</p>
+        </div>
+        <button className="gradient-primary text-white font-medium px-6 py-3 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl transform hover:-translate-y-0.5">
+          Export PDF
+        </button>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-sm font-medium text-gray-600">Pendapatan Hari Ini</h3>
-          <p className="text-2xl font-bold text-gray-900">{formatCurrency(2500000)}</p>
+      <div className="responsive-grid">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground">Pendapatan Hari Ini</h3>
+              <p className="text-3xl font-bold text-gradient mt-2">{formatCurrency(2500000)}</p>
+            </div>
+            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">💰</span>
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-sm font-medium text-gray-600">Transaksi Hari Ini</h3>
-          <p className="text-2xl font-bold text-gray-900">45</p>
+        
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground">Transaksi Hari Ini</h3>
+              <p className="text-3xl font-bold text-gradient mt-2">45</p>
+            </div>
+            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">📊</span>
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-sm font-medium text-gray-600">Pendapatan Bulan Ini</h3>
-          <p className="text-2xl font-bold text-gray-900">{formatCurrency(75000000)}</p>
+        
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground">Pendapatan Bulan Ini</h3>
+              <p className="text-3xl font-bold text-gradient mt-2">{formatCurrency(75000000)}</p>
+            </div>
+            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">📈</span>
+            </div>
+          </div>
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-sm font-medium text-gray-600">Total Pelanggan</h3>
-          <p className="text-2xl font-bold text-gray-900">1,234</p>
+        
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-medium text-muted-foreground">Total Pelanggan</h3>
+              <p className="text-3xl font-bold text-gradient mt-2">1,234</p>
+            </div>
+            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">👥</span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Report Filters */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Filter Laporan</h2>
+      <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg">
+        <h2 className="text-2xl font-semibold text-foreground mb-6">Filter Laporan</h2>
         <div className="grid gap-4 md:grid-cols-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Periode</label>
-            <select className="w-full p-2 border border-gray-300 rounded-md">
+            <label className="block text-sm font-medium text-foreground mb-2">Periode</label>
+            <select className="w-full p-3 bg-input border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent">
               <option>Hari Ini</option>
               <option>Minggu Ini</option>
               <option>Bulan Ini</option>
@@ -56,8 +92,8 @@ const ReportsPage: React.FC<ReportsPageProps> = ({ userRole, userBranchId }) => 
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Jenis Laporan</label>
-            <select className="w-full p-2 border border-gray-300 rounded-md">
+            <label className="block text-sm font-medium text-foreground mb-2">Jenis Laporan</label>
+            <select className="w-full p-3 bg-input border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent">
               <option>Semua Laporan</option>
               <option>Penjualan</option>
               <option>Keuangan</option>
@@ -65,7 +101,7 @@ const ReportsPage: React.FC<ReportsPageProps> = ({ userRole, userBranchId }) => 
             </select>
           </div>
           <div className="flex items-end">
-            <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">
+            <button className="w-full gradient-primary text-white font-medium py-3 px-4 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl">
               Generate Laporan
             </button>
           </div>
@@ -73,34 +109,36 @@ const ReportsPage: React.FC<ReportsPageProps> = ({ userRole, userBranchId }) => 
       </div>
 
       {/* Recent Transactions */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <h2 className="text-xl font-semibold mb-4">Transaksi Terbaru</h2>
+      <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl shadow-lg overflow-hidden">
+        <div className="p-6 border-b border-border">
+          <h2 className="text-2xl font-semibold text-foreground">Transaksi Terbaru</h2>
+        </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto">
-            <thead>
-              <tr className="bg-gray-50">
-                <th className="px-4 py-2 text-left">ID Transaksi</th>
-                <th className="px-4 py-2 text-left">Tanggal</th>
-                <th className="px-4 py-2 text-left">Layanan</th>
-                <th className="px-4 py-2 text-left">Barberman</th>
-                <th className="px-4 py-2 text-left">Total</th>
-                <th className="px-4 py-2 text-left">Status</th>
+          <table className="w-full">
+            <thead className="bg-muted/30">
+              <tr>
+                <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">ID Transaksi</th>
+                <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Tanggal</th>
+                <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Layanan</th>
+                <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Barberman</th>
+                <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Total</th>
+                <th className="text-left px-6 py-4 text-sm font-medium text-muted-foreground">Status</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border">
               {[
                 { id: 'TRX001', date: '2024-06-11', service: 'Potong Rambut Premium', barber: 'Ahmad', total: 50000, status: 'Selesai' },
                 { id: 'TRX002', date: '2024-06-11', service: 'Cukur Jenggot', barber: 'Budi', total: 15000, status: 'Selesai' },
                 { id: 'TRX003', date: '2024-06-11', service: 'Potong Rambut Regular', barber: 'Charlie', total: 25000, status: 'Selesai' },
               ].map((transaction) => (
-                <tr key={transaction.id} className="border-b">
-                  <td className="px-4 py-2">{transaction.id}</td>
-                  <td className="px-4 py-2">{transaction.date}</td>
-                  <td className="px-4 py-2">{transaction.service}</td>
-                  <td className="px-4 py-2">{transaction.barber}</td>
-                  <td className="px-4 py-2">{formatCurrency(transaction.total)}</td>
-                  <td className="px-4 py-2">
-                    <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm">
+                <tr key={transaction.id} className="hover:bg-muted/20 transition-colors">
+                  <td className="px-6 py-4 text-foreground font-medium">{transaction.id}</td>
+                  <td className="px-6 py-4 text-muted-foreground">{transaction.date}</td>
+                  <td className="px-6 py-4 text-foreground">{transaction.service}</td>
+                  <td className="px-6 py-4 text-muted-foreground">{transaction.barber}</td>
+                  <td className="px-6 py-4 text-foreground font-semibold">{formatCurrency(transaction.total)}</td>
+                  <td className="px-6 py-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                       {transaction.status}
                     </span>
                   </td>

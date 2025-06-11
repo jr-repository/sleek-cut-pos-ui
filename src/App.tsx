@@ -1,20 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
-import './App.css'; // Pastikan file ini ada di src/App.css
+import './App.css';
 
 // URL backend Anda
 const BASE_URL = 'http://localhost/barber-backend';
 
 // Impor komponen halaman yang sudah dibuat
-// Pastikan file-file ini ada di src/pages/ dengan nama yang sesuai
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import BarbermenPage from './pages/BarbermanPage';
+import BarbermanPage from './pages/BarbermanPage';
 import BranchesPage from './pages/BranchesPage';
 import ExpensesPage from './pages/ExpensesPage';
 import PaymentMethodsPage from './pages/PaymentMethodsPage';
 import POSPage from './pages/POSPage';
-import ProductsServicesPage from './pages/ProductServicePage';
+import ProductServicePage from './pages/ProductServicePage';
 import ReportsPage from './pages/ReportsPage';
 import UsersPage from './pages/UsersPage';
 
@@ -38,7 +36,6 @@ function App() {
   const [originalUsername, setOriginalUsername] = useState<string | null>(null);
   const [originalUserBranchName, setOriginalUserBranchName] = useState<string | null>(null);
 
-
   // Efek untuk memeriksa status autentikasi saat aplikasi dimuat
   useEffect(() => {
     const storedAuthStatus = localStorage.getItem('isAuthenticated');
@@ -50,7 +47,6 @@ function App() {
     const storedOriginalUserBranchId = localStorage.getItem('originalUserBranchId');
     const storedOriginalUsername = localStorage.getItem('originalUsername');
     const storedOriginalUserBranchName = localStorage.getItem('originalUserBranchName');
-
 
     if (storedAuthStatus === 'true' && storedUserRole) {
       setIsAuthenticated(true);
@@ -88,8 +84,8 @@ function App() {
     try {
       const response = await fetch(`${BASE_URL}/branches_api.php`, {
         headers: {
-          'X-User-Role': userRole || '', // Gunakan userRole saat ini untuk otorisasi API
-          'X-User-Branch-Id': (userBranchId !== null ? userBranchId.toString() : ''), // Gunakan userBranchId saat ini
+          'X-User-Role': userRole || '',
+          'X-User-Branch-Id': (userBranchId !== null ? userBranchId.toString() : ''),
         },
       });
       const data = await response.json();
@@ -98,7 +94,7 @@ function App() {
         if (branch) {
           if (isOriginal) {
             setOriginalUserBranchName(branch.name);
-            localStorage.setItem('originalUserBranchName', branch.name); // Simpan di localStorage
+            localStorage.setItem('originalUserBranchName', branch.name);
           } else {
             setUserBranchName(branch.name);
           }
@@ -122,7 +118,7 @@ function App() {
   useEffect(() => {
     if (userBranchId !== null) {
       if (userRole === 'kasir') {
-        fetchBranchName(userBranchId, false); // Fetch nama cabang untuk kasir aktif
+        fetchBranchName(userBranchId, false);
       } else if (userRole === 'admin' || userRole === 'owner') {
         setUserBranchName('Global');
       }
@@ -130,7 +126,6 @@ function App() {
       setUserBranchName(null);
     }
   }, [userBranchId, userRole]);
-
 
   // Fungsi untuk menangani login berhasil
   const handleLoginSuccess = (role: string, branch_id: number | null, username_param: string) => {
@@ -146,14 +141,13 @@ function App() {
     
     // Perbarui originalUserBranchName saat login
     if (role === 'kasir' && branch_id !== null) {
-      // Panggil fetchBranchName, yang akan juga menyimpan ke localStorage
       fetchBranchName(branch_id, true);
     } else if (role === 'admin' || role === 'owner') {
       setOriginalUserBranchName('Global');
       localStorage.setItem('originalUserBranchName', 'Global');
     } else {
       setOriginalUserBranchName(null);
-      localStorage.setItem('originalUserBranchName', ''); // Clear localStorage if no branch name
+      localStorage.setItem('originalUserBranchName', '');
     }
 
     localStorage.setItem('isAuthenticated', 'true');
@@ -169,36 +163,34 @@ function App() {
 
   // Fungsi untuk beralih tampilan cabang (untuk Admin/Owner)
   const handleSwitchBranchView = (branchId: number | null, branchName: string | null, roleOverride: string | null) => {
-    // Simpan status original sebelum beralih
     localStorage.setItem('originalUserRole', originalUserRole || '');
     localStorage.setItem('originalUserBranchId', originalUserBranchId ? originalUserBranchId.toString() : '');
     localStorage.setItem('originalUsername', originalUsername || '');
-    localStorage.setItem('originalUserBranchName', originalUserBranchName || ''); // Simpan originalUserBranchName
+    localStorage.setItem('originalUserBranchName', originalUserBranchName || '');
 
-    if (branchId === null) { // Kembali ke tampilan global (admin/owner asli)
+    if (branchId === null) {
       setUserRole(originalUserRole);
       setUserBranchId(originalUserBranchId);
       setUsername(originalUsername);
-      setUserBranchName(originalUserBranchName); // Gunakan nama cabang asli yang sudah tersimpan
+      setUserBranchName(originalUserBranchName);
       
       localStorage.setItem('userRole', originalUserRole || '');
       localStorage.setItem('userBranchId', originalUserBranchId ? originalUserBranchId.toString() : '');
       localStorage.setItem('username', originalUsername || '');
-      localStorage.setItem('userSwitchingBranch', 'false'); // Hapus flag
-    } else { // Masuk ke tampilan cabang tertentu sebagai kasir
+      localStorage.setItem('userSwitchingBranch', 'false');
+    } else {
       setUserRole(roleOverride || 'kasir');
       setUserBranchId(branchId);
-      setUsername(`(Lihat) ${originalUsername}`); // Tambahkan prefix untuk menandakan mode melihat
-      setUserBranchName(branchName); // Set nama cabang yang dipilih
+      setUsername(`(Lihat) ${originalUsername}`);
+      setUserBranchName(branchName);
 
       localStorage.setItem('userRole', roleOverride || 'kasir');
       localStorage.setItem('userBranchId', branchId.toString());
       localStorage.setItem('username', `(Lihat) ${originalUsername}`);
-      localStorage.setItem('userSwitchingBranch', 'true'); // Set flag
+      localStorage.setItem('userSwitchingBranch', 'true');
     }
     setCurrentPage('dashboard');
   };
-
 
   // Fungsi untuk menangani logout
   const handleLogout = () => {
@@ -231,7 +223,7 @@ function App() {
       case 'dashboard':
         return <DashboardPage userRole={userRole} userBranchId={userBranchId} onSwitchBranchView={handleSwitchBranchView} />;
       case 'barbermen':
-        return <BarbermenPage userRole={userRole} userBranchId={userBranchId} />;
+        return <BarbermanPage userRole={userRole} userBranchId={userBranchId} />;
       case 'branches':
         return <BranchesPage userRole={userRole} />;
       case 'expenses':
@@ -241,7 +233,7 @@ function App() {
       case 'pos':
         return <POSPage userRole={userRole} userBranchId={userBranchId} username={username} />;
       case 'productsServices':
-        return <ProductsServicesPage userRole={userRole} userBranchId={userBranchId} />;
+        return <ProductServicePage userRole={userRole} userBranchId={userBranchId} />;
       case 'reports':
         return <ReportsPage userRole={userRole} userBranchId={userBranchId} />;
       case 'users':
@@ -252,73 +244,149 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      {!isAuthenticated && renderPage()} {/* Hanya tampilkan LoginPage jika belum terautentikasi */}
+    <div className="min-h-screen barbershop-gradient flex">
+      {!isAuthenticated && renderPage()}
 
       {isAuthenticated && (
         <>
           {/* Sidebar */}
-          <aside className="w-64 bg-gray-800 text-white p-4 shadow-lg flex flex-col">
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold">Barbershop POS</h2>
+          <aside className="w-64 bg-sidebar border-r border-sidebar-border shadow-2xl flex flex-col">
+            <div className="text-center p-6 border-b border-sidebar-border">
+              <h2 className="text-2xl font-bold text-sidebar-foreground text-gradient">Barbershop POS</h2>
               {userBranchName && (
-                <p className="text-sm text-gray-300">({userBranchName})</p>
+                <p className="text-sm text-sidebar-foreground/70 mt-2">({userBranchName})</p>
               )}
             </div>
-            <nav className="flex-grow">
+            
+            <nav className="flex-grow p-4">
               <ul className="space-y-2">
                 <li>
-                  <button onClick={() => setCurrentPage('dashboard')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">Dashboard</button>
+                  <button 
+                    onClick={() => setCurrentPage('dashboard')} 
+                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                      currentPage === 'dashboard' ? 'bg-sidebar-accent shadow-lg' : ''
+                    }`}
+                  >
+                    <span className="text-sidebar-foreground font-medium">Dashboard</span>
+                  </button>
                 </li>
-                {originalUserRole === 'admin' && ( // Hanya admin yang bisa akses manajemen pengguna, pakai original role
+                {originalUserRole === 'admin' && (
                   <li>
-                    <button onClick={() => setCurrentPage('users')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">Manajemen Pengguna</button>
+                    <button 
+                      onClick={() => setCurrentPage('users')} 
+                      className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                        currentPage === 'users' ? 'bg-sidebar-accent shadow-lg' : ''
+                      }`}
+                    >
+                      <span className="text-sidebar-foreground font-medium">Manajemen Pengguna</span>
+                    </button>
                   </li>
                 )}
-                {(originalUserRole === 'admin' || originalUserRole === 'owner') && ( // Admin dan Owner bisa akses manajemen cabang, pakai original role
+                {(originalUserRole === 'admin' || originalUserRole === 'owner') && (
                   <li>
-                    <button onClick={() => setCurrentPage('branches')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">Manajemen Cabang</button>
+                    <button 
+                      onClick={() => setCurrentPage('branches')} 
+                      className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                        currentPage === 'branches' ? 'bg-sidebar-accent shadow-lg' : ''
+                      }`}
+                    >
+                      <span className="text-sidebar-foreground font-medium">Manajemen Cabang</span>
+                    </button>
                   </li>
                 )}
                 <li>
-                  <button onClick={() => setCurrentPage('barbermen')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">Barberman</button>
+                  <button 
+                    onClick={() => setCurrentPage('barbermen')} 
+                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                      currentPage === 'barbermen' ? 'bg-sidebar-accent shadow-lg' : ''
+                    }`}
+                  >
+                    <span className="text-sidebar-foreground font-medium">Barberman</span>
+                  </button>
                 </li>
                 <li>
-                  <button onClick={() => setCurrentPage('productsServices')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">Produk/Layanan</button>
+                  <button 
+                    onClick={() => setCurrentPage('productsServices')} 
+                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                      currentPage === 'productsServices' ? 'bg-sidebar-accent shadow-lg' : ''
+                    }`}
+                  >
+                    <span className="text-sidebar-foreground font-medium">Produk/Layanan</span>
+                  </button>
                 </li>
                 <li>
-                  <button onClick={() => setCurrentPage('expenses')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">Pengeluaran</button>
+                  <button 
+                    onClick={() => setCurrentPage('expenses')} 
+                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                      currentPage === 'expenses' ? 'bg-sidebar-accent shadow-lg' : ''
+                    }`}
+                  >
+                    <span className="text-sidebar-foreground font-medium">Pengeluaran</span>
+                  </button>
                 </li>
-                {(originalUserRole === 'admin' || originalUserRole === 'owner') && ( // Admin dan Owner bisa akses metode pembayaran, pakai original role
+                {(originalUserRole === 'admin' || originalUserRole === 'owner') && (
                   <li>
-                    <button onClick={() => setCurrentPage('paymentMethods')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">Metode Pembayaran</button>
+                    <button 
+                      onClick={() => setCurrentPage('paymentMethods')} 
+                      className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                        currentPage === 'paymentMethods' ? 'bg-sidebar-accent shadow-lg' : ''
+                      }`}
+                    >
+                      <span className="text-sidebar-foreground font-medium">Metode Pembayaran</span>
+                    </button>
                   </li>
                 )}
                 <li>
-                  <button onClick={() => setCurrentPage('pos')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">POS Transaksi</button>
+                  <button 
+                    onClick={() => setCurrentPage('pos')} 
+                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                      currentPage === 'pos' ? 'bg-sidebar-accent shadow-lg' : ''
+                    }`}
+                  >
+                    <span className="text-sidebar-foreground font-medium">POS Transaksi</span>
+                  </button>
                 </li>
                 <li>
-                  <button onClick={() => setCurrentPage('reports')} className="block w-full text-left py-2 px-3 rounded-md hover:bg-gray-700 transition duration-150">Laporan</button>
+                  <button 
+                    onClick={() => setCurrentPage('reports')} 
+                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
+                      currentPage === 'reports' ? 'bg-sidebar-accent shadow-lg' : ''
+                    }`}
+                  >
+                    <span className="text-sidebar-foreground font-medium">Laporan</span>
+                  </button>
                 </li>
               </ul>
             </nav>
-            <div className="mt-auto pt-4 border-t border-gray-700">
-              {username && <p className="text-sm mb-2">Login sebagai: <span className="font-semibold">{username}</span></p>}
-              {isViewingSpecificBranch && ( // Tombol kembali ke tampilan global untuk admin/owner
+            
+            <div className="p-4 border-t border-sidebar-border">
+              {username && (
+                <p className="text-sm text-sidebar-foreground/80 mb-3">
+                  Login sebagai: <span className="font-semibold text-sidebar-foreground">{username}</span>
+                </p>
+              )}
+              {isViewingSpecificBranch && (
                 <button
-                  onClick={() => handleSwitchBranchView(null, null, null)} // Null untuk kembali ke tampilan asli
-                  className="w-full bg-blue-600 px-4 py-2 rounded-md hover:bg-blue-700 transition duration-150 mt-2"
+                  onClick={() => handleSwitchBranchView(null, null, null)}
+                  className="w-full gradient-primary text-white font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl mb-2"
                 >
                   Kembali ke Tampilan Global
                 </button>
               )}
-              <button onClick={handleLogout} className="w-full bg-red-600 px-4 py-2 rounded-md hover:bg-red-700 transition duration-150 mt-2">Logout</button>
+              <button 
+                onClick={handleLogout} 
+                className="w-full bg-destructive text-destructive-foreground font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-300 hover:bg-destructive/90 hover:shadow-xl"
+              >
+                Logout
+              </button>
             </div>
           </aside>
 
           {/* Main Content Area */}
-          <main className="flex-grow p-4 overflow-y-auto">
-            {renderPage()}
+          <main className="flex-grow bg-background overflow-y-auto">
+            <div className="p-6">
+              {renderPage()}
+            </div>
           </main>
         </>
       )}

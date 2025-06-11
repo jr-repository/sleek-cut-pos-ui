@@ -23,48 +23,60 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ userRole, userBranchId, o
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600">Ringkasan performa barbershop Anda</p>
+          <h1 className="text-4xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground mt-2">Ringkasan performa barbershop Anda</p>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white p-6 rounded-lg shadow">
+      <div className="responsive-grid">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Pendapatan</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(105000000)}</p>
+              <p className="text-sm font-medium text-muted-foreground">Total Pendapatan</p>
+              <p className="text-3xl font-bold text-gradient mt-2">{formatCurrency(105000000)}</p>
+            </div>
+            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">💰</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Transaksi</p>
-              <p className="text-2xl font-bold text-gray-900">1,234</p>
+              <p className="text-sm font-medium text-muted-foreground">Total Transaksi</p>
+              <p className="text-3xl font-bold text-gradient mt-2">1,234</p>
+            </div>
+            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">📊</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Barberman Aktif</p>
-              <p className="text-2xl font-bold text-gray-900">24</p>
+              <p className="text-sm font-medium text-muted-foreground">Barberman Aktif</p>
+              <p className="text-3xl font-bold text-gradient mt-2">24</p>
+            </div>
+            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">👨‍💼</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Rata-rata per Transaksi</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(85000)}</p>
+              <p className="text-sm font-medium text-muted-foreground">Rata-rata per Transaksi</p>
+              <p className="text-3xl font-bold text-gradient mt-2">{formatCurrency(85000)}</p>
+            </div>
+            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">📈</span>
             </div>
           </div>
         </div>
@@ -72,18 +84,23 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ userRole, userBranchId, o
 
       {/* Branch Cards for Admin/Owner */}
       {(userRole === 'admin' || userRole === 'owner') && (
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Pilih Cabang untuk Melihat Detail</h2>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg">
+          <h2 className="text-2xl font-semibold text-foreground mb-6">Pilih Cabang untuk Melihat Detail</h2>
+          <div className="branch-grid">
             {mockBranches.map((branch) => (
               <div 
                 key={branch.id} 
-                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                className="bg-card border border-border rounded-xl p-6 hover:shadow-xl hover:border-primary/50 transition-all duration-300 cursor-pointer group"
                 onClick={() => onSwitchBranchView(branch.id, branch.name, 'kasir')}
               >
-                <h3 className="font-semibold text-gray-900">{branch.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">{branch.address}</p>
-                <button className="mt-3 w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-150">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                    <span className="text-2xl">🏪</span>
+                  </div>
+                </div>
+                <h3 className="text-xl font-semibold text-foreground mb-2">{branch.name}</h3>
+                <p className="text-muted-foreground text-sm mb-4">{branch.address}</p>
+                <button className="w-full gradient-primary text-white font-medium py-3 px-4 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl transform group-hover:-translate-y-0.5">
                   Lihat Cabang
                 </button>
               </div>

@@ -17,30 +17,35 @@ const POSPage: React.FC<POSPageProps> = ({ userRole, userBranchId, username }) =
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Point of Sale</h1>
-        <p className="text-gray-600">Sistem transaksi barbershop</p>
+        <h1 className="text-4xl font-bold text-foreground">Point of Sale</h1>
+        <p className="text-muted-foreground mt-2">Sistem transaksi barbershop</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Product/Service Selection */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Pilih Layanan/Produk</h2>
-          <div className="grid gap-2">
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg">
+          <h2 className="text-2xl font-semibold text-foreground mb-6">Pilih Layanan/Produk</h2>
+          <div className="space-y-3">
             {[
-              { id: 1, name: 'Potong Rambut Regular', price: 25000 },
-              { id: 2, name: 'Potong Rambut Premium', price: 50000 },
-              { id: 3, name: 'Cukur Jenggot', price: 15000 },
-              { id: 4, name: 'Styling Rambut', price: 35000 },
+              { id: 1, name: 'Potong Rambut Regular', price: 25000, icon: '✂️' },
+              { id: 2, name: 'Potong Rambut Premium', price: 50000, icon: '✂️' },
+              { id: 3, name: 'Cukur Jenggot', price: 15000, icon: '🪒' },
+              { id: 4, name: 'Styling Rambut', price: 35000, icon: '💇' },
             ].map((service) => (
               <button
                 key={service.id}
-                className="text-left p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300"
+                className="w-full text-left p-4 bg-card border border-border rounded-lg hover:border-primary/50 hover:shadow-lg transition-all duration-300 group"
               >
-                <div className="flex justify-between">
-                  <span className="font-medium">{service.name}</span>
-                  <span className="text-gray-600">{formatCurrency(service.price)}</span>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+                      <span className="text-lg">{service.icon}</span>
+                    </div>
+                    <span className="font-medium text-foreground">{service.name}</span>
+                  </div>
+                  <span className="text-primary font-semibold">{formatCurrency(service.price)}</span>
                 </div>
               </button>
             ))}
@@ -48,23 +53,28 @@ const POSPage: React.FC<POSPageProps> = ({ userRole, userBranchId, username }) =
         </div>
 
         {/* Cart and Payment */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Keranjang</h2>
-          <div className="space-y-3 mb-4">
-            <div className="flex justify-between items-center p-3 bg-gray-50 rounded">
-              <span>Potong Rambut Regular</span>
-              <span>{formatCurrency(25000)}</span>
+        <div className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 shadow-lg">
+          <h2 className="text-2xl font-semibold text-foreground mb-6">Keranjang</h2>
+          <div className="space-y-3 mb-6">
+            <div className="flex justify-between items-center p-4 bg-muted/20 rounded-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                  <span>✂️</span>
+                </div>
+                <span className="text-foreground">Potong Rambut Regular</span>
+              </div>
+              <span className="font-semibold text-foreground">{formatCurrency(25000)}</span>
             </div>
           </div>
           
-          <div className="border-t pt-4">
-            <div className="flex justify-between text-lg font-semibold mb-4">
-              <span>Total:</span>
-              <span>{formatCurrency(25000)}</span>
+          <div className="border-t border-border pt-6">
+            <div className="flex justify-between text-2xl font-bold mb-6">
+              <span className="text-foreground">Total:</span>
+              <span className="text-gradient">{formatCurrency(25000)}</span>
             </div>
             
-            <div className="space-y-3">
-              <select className="w-full p-2 border border-gray-300 rounded-md">
+            <div className="space-y-4">
+              <select className="w-full p-3 bg-input border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent">
                 <option>Pilih Metode Pembayaran</option>
                 <option>Tunai</option>
                 <option>Kartu Kredit/Debit</option>
@@ -72,7 +82,7 @@ const POSPage: React.FC<POSPageProps> = ({ userRole, userBranchId, username }) =
                 <option>OVO</option>
               </select>
               
-              <button className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 font-semibold">
+              <button className="w-full gradient-primary text-white font-semibold py-4 px-4 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl transform hover:-translate-y-0.5">
                 Proses Pembayaran
               </button>
             </div>

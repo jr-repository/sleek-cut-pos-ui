@@ -11,45 +11,51 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulasi login berhasil - dalam implementasi nyata, ini akan melakukan API call
     onLoginSuccess('admin', null, 'Admin User');
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-6">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Barbershop POS</h2>
-          <p className="text-gray-600 mt-2">Masuk ke sistem Point of Sale</p>
+    <div className="min-h-screen barbershop-gradient flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-card/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-border p-8">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gradient mb-2">Barbershop POS</h1>
+          <p className="text-muted-foreground">Masuk ke sistem Point of Sale</p>
         </div>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email / Username</label>
+        
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="email" className="block text-sm font-medium text-foreground">
+              Email / Username
+            </label>
             <input
               id="email"
               type="email"
               placeholder="admin@barbershop.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 bg-input border border-border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 text-foreground placeholder-muted-foreground"
               required
             />
           </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+          
+          <div className="space-y-2">
+            <label htmlFor="password" className="block text-sm font-medium text-foreground">
+              Password
+            </label>
             <input
               id="password"
               type="password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 bg-input border border-border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-300 text-foreground placeholder-muted-foreground"
               required
             />
           </div>
+          
           <button 
             type="submit" 
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-150"
+            className="w-full gradient-primary text-white font-medium py-3 px-4 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl transform hover:-translate-y-0.5"
           >
             Masuk
           </button>
