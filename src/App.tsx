@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Home, Users, Building2, DollarSign, CreditCard, ShoppingCart, Package, FileText, Settings, LogOut, ChevronLeft, Bell, User } from 'lucide-react';
 import './App.css';
@@ -273,7 +274,7 @@ function App() {
           )}
 
           {/* Sidebar */}
-          <aside className={`${sidebarMinimized ? 'w-16' : 'w-64'} bg-gray-800 border-r border-gray-700 shadow-xl flex flex-col transition-all duration-300 fixed h-full z-50 lg:relative lg:translate-x-0 ${
+          <aside className={`${sidebarMinimized ? 'w-20' : 'w-64'} bg-gray-800 border-r border-gray-700 shadow-xl flex flex-col transition-all duration-300 fixed h-screen z-50 lg:relative lg:translate-x-0 ${
             mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}>
             {/* Sidebar Header */}
@@ -311,14 +312,14 @@ function App() {
                           setCurrentPage(item.id);
                           setMobileMenuOpen(false);
                         }}
-                        className={`w-full flex items-center ${sidebarMinimized ? 'justify-center' : 'justify-start'} py-3 px-3 rounded-lg transition-all duration-200 ${
+                        className={`w-full flex items-center ${sidebarMinimized ? 'justify-center px-3 py-4' : 'justify-start px-3 py-3'} rounded-lg transition-all duration-200 ${
                           currentPage === item.id
                             ? 'bg-blue-600 text-white shadow-lg'
                             : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                         }`}
                         title={sidebarMinimized ? item.label : undefined}
                       >
-                        <Icon size={20} />
+                        <Icon size={sidebarMinimized ? 24 : 20} />
                         {!sidebarMinimized && (
                           <span className="ml-3 text-sm font-medium">{item.label}</span>
                         )}
@@ -340,7 +341,7 @@ function App() {
               {isViewingSpecificBranch && (
                 <button
                   onClick={() => handleSwitchBranchView(null, null, null)}
-                  className={`w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg mb-2 ${sidebarMinimized ? 'text-xs' : ''}`}
+                  className={`w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg mb-2 ${sidebarMinimized ? 'text-xs flex items-center justify-center' : ''}`}
                 >
                   {sidebarMinimized ? <Home size={16} /> : 'Kembali ke Global'}
                 </button>
@@ -350,7 +351,7 @@ function App() {
                 onClick={handleLogout}
                 className={`w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center ${sidebarMinimized ? 'justify-center' : 'justify-start'}`}
               >
-                <LogOut size={16} />
+                <LogOut size={sidebarMinimized ? 20 : 16} />
                 {!sidebarMinimized && <span className="ml-2">Logout</span>}
               </button>
             </div>
