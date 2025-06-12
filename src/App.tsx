@@ -357,7 +357,7 @@ function App() {
           </aside>
 
           {/* Main Content Area */}
-          <div className={`flex-1 flex flex-col ${sidebarMinimized ? 'lg:ml-16' : 'lg:ml-64'} transition-all duration-300`}>
+          <div className="flex-1 flex flex-col min-h-screen">
             {/* Header */}
             <header className="bg-gray-800 border-b border-gray-700 shadow-lg sticky top-0 z-30">
               <div className="flex items-center justify-between px-4 lg:px-6 py-4">
@@ -376,6 +376,7 @@ function App() {
                       {currentPage === 'productsServices' ? 'Produk & Layanan' : 
                        currentPage === 'paymentMethods' ? 'Metode Pembayaran' :
                        currentPage === 'pos' ? 'Point of Sale' :
+                       currentPage === 'barbermen' ? 'Barberman' :
                        currentPage}
                     </h1>
                     {userBranchName && (
@@ -406,7 +407,7 @@ function App() {
             </header>
 
             {/* Main Content */}
-            <main className="flex-1 p-4 lg:p-6 overflow-auto">
+            <main className="flex-1 p-4 lg:p-6 overflow-auto bg-gray-900">
               {renderPage()}
             </main>
           </div>
