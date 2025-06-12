@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Home, Users, Building2, DollarSign, CreditCard, ShoppingCart, Package, FileText, Settings, LogOut, ChevronLeft, Bell, User } from 'lucide-react';
 import './App.css';
@@ -278,7 +277,7 @@ function App() {
             mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
           }`}>
             {/* Sidebar Header */}
-            <div className="p-4 border-b border-gray-700">
+            <div className="p-4 border-b border-gray-700 flex-shrink-0">
               <div className="flex items-center justify-between">
                 {!sidebarMinimized && (
                   <div className="text-center flex-1">
@@ -300,8 +299,8 @@ function App() {
               </div>
             </div>
 
-            {/* Navigation */}
-            <nav className="flex-1 p-4">
+            {/* Navigation - Takes remaining space but leaves room for footer */}
+            <nav className="flex-1 p-4 overflow-y-auto">
               <ul className="space-y-2">
                 {menuItems.map((item) => {
                   const Icon = item.icon;
@@ -330,8 +329,8 @@ function App() {
               </ul>
             </nav>
 
-            {/* Sidebar Footer */}
-            <div className="p-4 border-t border-gray-700">
+            {/* Sidebar Footer - Always at bottom */}
+            <div className="p-4 border-t border-gray-700 flex-shrink-0 mt-auto">
               {!sidebarMinimized && username && (
                 <p className="text-sm text-gray-400 mb-3">
                   Login sebagai: <span className="text-white font-medium">{username}</span>
@@ -358,7 +357,7 @@ function App() {
           </aside>
 
           {/* Main Content Area */}
-          <div className="flex-1 flex flex-col min-h-screen">
+          <div className={`flex-1 flex flex-col min-h-screen ${sidebarMinimized ? 'lg:ml-20' : 'lg:ml-64'} transition-all duration-300`}>
             {/* Header */}
             <header className="bg-gray-800 border-b border-gray-700 shadow-lg sticky top-0 z-30">
               <div className="flex items-center justify-between px-4 lg:px-6 py-4">
