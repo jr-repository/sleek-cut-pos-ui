@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Menu, X, Home, Users, Building2, DollarSign, CreditCard, ShoppingCart, Package, FileText, Settings, LogOut, ChevronLeft, Bell, User } from 'lucide-react';
 import './App.css';
 
 // URL backend Anda
@@ -29,6 +30,8 @@ function App() {
   const [userBranchId, setUserBranchId] = useState<number | null>(null);
   const [userBranchName, setUserBranchName] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [sidebarMinimized, setSidebarMinimized] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // States untuk menyimpan peran dan cabang asli (khusus admin/owner untuk beralih tampilan)
   const [originalUserRole, setOriginalUserRole] = useState<string | null>(null);
@@ -243,151 +246,170 @@ function App() {
     }
   };
 
+  const menuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: Home },
+    ...(originalUserRole === 'admin' ? [{ id: 'users', label: 'Manajemen Pengguna', icon: Users }] : []),
+    ...((originalUserRole === 'admin' || originalUserRole === 'owner') ? [{ id: 'branches', label: 'Manajemen Cabang', icon: Building2 }] : []),
+    { id: 'barbermen', label: 'Barberman', icon: Users },
+    { id: 'productsServices', label: 'Produk/Layanan', icon: Package },
+    { id: 'expenses', label: 'Pengeluaran', icon: DollarSign },
+    ...((originalUserRole === 'admin' || originalUserRole === 'owner') ? [{ id: 'paymentMethods', label: 'Metode Pembayaran', icon: CreditCard }] : []),
+    { id: 'pos', label: 'POS Transaksi', icon: ShoppingCart },
+    { id: 'reports', label: 'Laporan', icon: FileText },
+  ];
+
   return (
-    <div className="min-h-screen barbershop-gradient flex">
+    <div className="min-h-screen bg-gray-900 flex">
       {!isAuthenticated && renderPage()}
 
       {isAuthenticated && (
         <>
+          {/* Mobile Menu Overlay */}
+          {mobileMenuOpen && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+              onClick={() => setMobileMenuOpen(false)}
+            />
+          )}
+
           {/* Sidebar */}
-          <aside className="w-64 bg-sidebar border-r border-sidebar-border shadow-2xl flex flex-col">
-            <div className="text-center p-6 border-b border-sidebar-border">
-              <h2 className="text-2xl font-bold text-sidebar-foreground text-gradient">Barbershop POS</h2>
-              {userBranchName && (
-                <p className="text-sm text-sidebar-foreground/70 mt-2">({userBranchName})</p>
-              )}
+          <aside className={`${sidebarMinimized ? 'w-16' : 'w-64'} bg-gray-800 border-r border-gray-700 shadow-xl flex flex-col transition-all duration-300 fixed h-full z-50 lg:relative lg:translate-x-0 ${
+            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          }`}>
+            {/* Sidebar Header */}
+            <div className="p-4 border-b border-gray-700">
+              <div className="flex items-center justify-between">
+                {!sidebarMinimized && (
+                  <div className="text-center flex-1">
+                    <h2 className="text-xl font-bold text-white">Barbershop POS</h2>
+                    {userBranchName && (
+                      <p className="text-sm text-gray-400">({userBranchName})</p>
+                    )}
+                  </div>
+                )}
+                <button
+                  onClick={() => {
+                    setSidebarMinimized(!sidebarMinimized);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
+                >
+                  {sidebarMinimized ? <Menu size={20} /> : <ChevronLeft size={20} />}
+                </button>
+              </div>
             </div>
-            
-            <nav className="flex-grow p-4">
+
+            {/* Navigation */}
+            <nav className="flex-1 p-4">
               <ul className="space-y-2">
-                <li>
-                  <button 
-                    onClick={() => setCurrentPage('dashboard')} 
-                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                      currentPage === 'dashboard' ? 'bg-sidebar-accent shadow-lg' : ''
-                    }`}
-                  >
-                    <span className="text-sidebar-foreground font-medium">Dashboard</span>
-                  </button>
-                </li>
-                {originalUserRole === 'admin' && (
-                  <li>
-                    <button 
-                      onClick={() => setCurrentPage('users')} 
-                      className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                        currentPage === 'users' ? 'bg-sidebar-accent shadow-lg' : ''
-                      }`}
-                    >
-                      <span className="text-sidebar-foreground font-medium">Manajemen Pengguna</span>
-                    </button>
-                  </li>
-                )}
-                {(originalUserRole === 'admin' || originalUserRole === 'owner') && (
-                  <li>
-                    <button 
-                      onClick={() => setCurrentPage('branches')} 
-                      className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                        currentPage === 'branches' ? 'bg-sidebar-accent shadow-lg' : ''
-                      }`}
-                    >
-                      <span className="text-sidebar-foreground font-medium">Manajemen Cabang</span>
-                    </button>
-                  </li>
-                )}
-                <li>
-                  <button 
-                    onClick={() => setCurrentPage('barbermen')} 
-                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                      currentPage === 'barbermen' ? 'bg-sidebar-accent shadow-lg' : ''
-                    }`}
-                  >
-                    <span className="text-sidebar-foreground font-medium">Barberman</span>
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setCurrentPage('productsServices')} 
-                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                      currentPage === 'productsServices' ? 'bg-sidebar-accent shadow-lg' : ''
-                    }`}
-                  >
-                    <span className="text-sidebar-foreground font-medium">Produk/Layanan</span>
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setCurrentPage('expenses')} 
-                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                      currentPage === 'expenses' ? 'bg-sidebar-accent shadow-lg' : ''
-                    }`}
-                  >
-                    <span className="text-sidebar-foreground font-medium">Pengeluaran</span>
-                  </button>
-                </li>
-                {(originalUserRole === 'admin' || originalUserRole === 'owner') && (
-                  <li>
-                    <button 
-                      onClick={() => setCurrentPage('paymentMethods')} 
-                      className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                        currentPage === 'paymentMethods' ? 'bg-sidebar-accent shadow-lg' : ''
-                      }`}
-                    >
-                      <span className="text-sidebar-foreground font-medium">Metode Pembayaran</span>
-                    </button>
-                  </li>
-                )}
-                <li>
-                  <button 
-                    onClick={() => setCurrentPage('pos')} 
-                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                      currentPage === 'pos' ? 'bg-sidebar-accent shadow-lg' : ''
-                    }`}
-                  >
-                    <span className="text-sidebar-foreground font-medium">POS Transaksi</span>
-                  </button>
-                </li>
-                <li>
-                  <button 
-                    onClick={() => setCurrentPage('reports')} 
-                    className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 hover:bg-sidebar-accent hover:shadow-lg ${
-                      currentPage === 'reports' ? 'bg-sidebar-accent shadow-lg' : ''
-                    }`}
-                  >
-                    <span className="text-sidebar-foreground font-medium">Laporan</span>
-                  </button>
-                </li>
+                {menuItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <li key={item.id}>
+                      <button
+                        onClick={() => {
+                          setCurrentPage(item.id);
+                          setMobileMenuOpen(false);
+                        }}
+                        className={`w-full flex items-center ${sidebarMinimized ? 'justify-center' : 'justify-start'} py-3 px-3 rounded-lg transition-all duration-200 ${
+                          currentPage === item.id
+                            ? 'bg-blue-600 text-white shadow-lg'
+                            : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                        }`}
+                        title={sidebarMinimized ? item.label : undefined}
+                      >
+                        <Icon size={20} />
+                        {!sidebarMinimized && (
+                          <span className="ml-3 text-sm font-medium">{item.label}</span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             </nav>
-            
-            <div className="p-4 border-t border-sidebar-border">
-              {username && (
-                <p className="text-sm text-sidebar-foreground/80 mb-3">
-                  Login sebagai: <span className="font-semibold text-sidebar-foreground">{username}</span>
+
+            {/* Sidebar Footer */}
+            <div className="p-4 border-t border-gray-700">
+              {!sidebarMinimized && username && (
+                <p className="text-sm text-gray-400 mb-3">
+                  Login sebagai: <span className="text-white font-medium">{username}</span>
                 </p>
               )}
+              
               {isViewingSpecificBranch && (
                 <button
                   onClick={() => handleSwitchBranchView(null, null, null)}
-                  className="w-full gradient-primary text-white font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl mb-2"
+                  className={`w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg mb-2 ${sidebarMinimized ? 'text-xs' : ''}`}
                 >
-                  Kembali ke Tampilan Global
+                  {sidebarMinimized ? <Home size={16} /> : 'Kembali ke Global'}
                 </button>
               )}
-              <button 
-                onClick={handleLogout} 
-                className="w-full bg-destructive text-destructive-foreground font-medium py-2 px-4 rounded-lg shadow-lg transition-all duration-300 hover:bg-destructive/90 hover:shadow-xl"
+              
+              <button
+                onClick={handleLogout}
+                className={`w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center ${sidebarMinimized ? 'justify-center' : 'justify-start'}`}
               >
-                Logout
+                <LogOut size={16} />
+                {!sidebarMinimized && <span className="ml-2">Logout</span>}
               </button>
             </div>
           </aside>
 
           {/* Main Content Area */}
-          <main className="flex-grow bg-background overflow-y-auto">
-            <div className="p-6">
+          <div className={`flex-1 flex flex-col ${sidebarMinimized ? 'lg:ml-16' : 'lg:ml-64'} transition-all duration-300`}>
+            {/* Header */}
+            <header className="bg-gray-800 border-b border-gray-700 shadow-lg sticky top-0 z-30">
+              <div className="flex items-center justify-between px-4 lg:px-6 py-4">
+                <div className="flex items-center gap-4">
+                  {/* Mobile Menu Button */}
+                  <button
+                    onClick={() => setMobileMenuOpen(true)}
+                    className="lg:hidden p-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
+                  >
+                    <Menu size={20} />
+                  </button>
+                  
+                  {/* Page Title */}
+                  <div>
+                    <h1 className="text-xl font-bold text-white capitalize">
+                      {currentPage === 'productsServices' ? 'Produk & Layanan' : 
+                       currentPage === 'paymentMethods' ? 'Metode Pembayaran' :
+                       currentPage === 'pos' ? 'Point of Sale' :
+                       currentPage}
+                    </h1>
+                    {userBranchName && (
+                      <p className="text-sm text-gray-400">{userBranchName}</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  {/* Notifications */}
+                  <button className="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white transition-colors relative">
+                    <Bell size={20} />
+                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                  </button>
+
+                  {/* User Menu */}
+                  <div className="flex items-center gap-3">
+                    <div className="hidden md:block text-right">
+                      <p className="text-sm font-medium text-white">{username}</p>
+                      <p className="text-xs text-gray-400 capitalize">{userRole}</p>
+                    </div>
+                    <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-violet-600 rounded-full flex items-center justify-center">
+                      <User className="text-white" size={20} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </header>
+
+            {/* Main Content */}
+            <main className="flex-1 p-4 lg:p-6 overflow-auto">
               {renderPage()}
-            </div>
-          </main>
+            </main>
+          </div>
         </>
       )}
     </div>
