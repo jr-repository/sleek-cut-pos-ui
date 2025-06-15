@@ -90,7 +90,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
         mobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`}>
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-gray-700">
+        <div className="p-4 border-b border-gray-700 flex-shrink-0">
           <div className="flex items-center justify-between">
             {!sidebarMinimized && (
               <div className="text-center flex-1">
@@ -113,7 +113,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4">
+        <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
@@ -143,7 +143,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
         </nav>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4 border-t border-gray-700 flex-shrink-0">
           {!sidebarMinimized && username && (
             <p className="text-sm text-gray-400 mb-3">
               Login sebagai: <span className="text-white font-medium">{username}</span>
@@ -153,7 +153,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
           {(isViewingClient || isViewingBranch) && (
             <button
               onClick={handleReturnToOriginalView}
-              className={`w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg mb-2 ${sidebarMinimized ? 'text-xs flex items-center justify-center' : ''}`}
+              className={`w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg mb-2 ${sidebarMinimized ? 'text-xs flex items-center justify-center' : ''}`}
             >
               {sidebarMinimized ? <Home size={16} /> : 'Kembali ke Global'}
             </button>

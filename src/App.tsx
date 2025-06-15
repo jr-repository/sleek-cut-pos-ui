@@ -386,7 +386,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-gray-900 flex">
       {!isAuthenticated ? ( // Jika belum terautentikasi, tampilkan hanya LoginPage
         renderPage()
       ) : ( // Jika sudah terautentikasi, tampilkan Sidebar dan Main Content
@@ -407,7 +407,7 @@ function App() {
           />
 
           {/* Main Content Area */}
-          <main className="flex-grow p-4 overflow-y-auto">
+          <main className="flex-grow bg-gray-900 overflow-y-auto">
             {renderPage()}
           </main>
         </>
