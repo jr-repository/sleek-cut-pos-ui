@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Home, Users, Building2, DollarSign, CreditCard, ShoppingCart, Package, FileText, Settings, LogOut, ChevronLeft, Bell, User } from 'lucide-react';
 import './App.css';
@@ -132,21 +131,21 @@ function App() {
   }, [userBranchId, userRole]);
 
   // Fungsi untuk menangani login berhasil
-  const handleLoginSuccess = (role: string, branch_id: number | null, username_param: string) => {
+  const handleLoginSuccess = (user: any, inactiveMessage?: string | null) => {
     setIsAuthenticated(true);
-    setUserRole(role);
-    setUserBranchId(branch_id);
-    setUsername(username_param);
+    setUserRole(user.role);
+    setUserBranchId(user.branch_id);
+    setUsername(user.username);
 
     // Simpan kredensial asli saat login pertama kali
-    setOriginalUserRole(role);
-    setOriginalUserBranchId(branch_id);
-    setOriginalUsername(username_param);
+    setOriginalUserRole(user.role);
+    setOriginalUserBranchId(user.branch_id);
+    setOriginalUsername(user.username);
     
     // Perbarui originalUserBranchName saat login
-    if (role === 'kasir' && branch_id !== null) {
-      fetchBranchName(branch_id, true);
-    } else if (role === 'admin' || role === 'owner') {
+    if (user.role === 'kasir' && user.branch_id !== null) {
+      fetchBranchName(user.branch_id, true);
+    } else if (user.role === 'admin' || user.role === 'owner') {
       setOriginalUserBranchName('Global');
       localStorage.setItem('originalUserBranchName', 'Global');
     } else {
@@ -155,12 +154,12 @@ function App() {
     }
 
     localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('userRole', role);
-    localStorage.setItem('userBranchId', branch_id ? branch_id.toString() : '');
-    localStorage.setItem('username', username_param);
-    localStorage.setItem('originalUserRole', role);
-    localStorage.setItem('originalUserBranchId', branch_id ? branch_id.toString() : '');
-    localStorage.setItem('originalUsername', username_param);
+    localStorage.setItem('userRole', user.role);
+    localStorage.setItem('userBranchId', user.branch_id ? user.branch_id.toString() : '');
+    localStorage.setItem('username', user.username);
+    localStorage.setItem('originalUserRole', user.role);
+    localStorage.setItem('originalUserBranchId', user.branch_id ? user.branch_id.toString() : '');
+    localStorage.setItem('originalUsername', user.username);
     
     setCurrentPage('dashboard');
   };
