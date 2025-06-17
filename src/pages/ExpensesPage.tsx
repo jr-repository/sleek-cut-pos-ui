@@ -1,70 +1,193 @@
 
-import React from 'react';
+import React, { useState } from 'react';
+import { DollarSign, Plus, Edit3, Trash2, Search, Calendar, TrendingDown } from 'lucide-react';
 
 interface ExpensesPageProps {
   userRole: string | null;
   userBranchId: number | null;
-  currentClientId: number | null;
 }
 
-const ExpensesPage: React.FC<ExpensesPageProps> = () => {
+const ExpensesPage: React.FC<ExpensesPageProps> = ({ userRole, userBranchId }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const expenses = [
+    { 
+      id: 1, 
+      description: 'Pembelian Peralatan Gunting', 
+      amount: 500000, 
+      category: 'Peralatan', 
+      date: '2024-01-15',
+      status: 'Approved'
+    },
+    { 
+      id: 2, 
+      description: 'Tagihan Listrik Bulan Januari', 
+      amount: 750000, 
+      category: 'Utilitas', 
+      date: '2024-01-10',
+      status: 'Paid'
+    },
+    { 
+      id: 3, 
+      description: 'Restok Produk Hair Care', 
+      amount: 1250000, 
+      category: 'Inventory', 
+      date: '2024-01-08',
+      status: 'Paid'
+    },
+    { 
+      id: 4, 
+      description: 'Sewa Tempat Bulanan', 
+      amount: 5000000, 
+      category: 'Sewa', 
+      date: '2024-01-01',
+      status: 'Paid'
+    },
+  ];
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const filteredExpenses = expenses.filter(expense =>
+    expense.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    expense.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const totalExpenses = expenses.reduce((total, expense) => total + expense.amount, 0);
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white">Pengeluaran</h1>
-          <p className="text-gray-400 mt-2">Kelola data pengeluaran barbershop</p>
+      {/* Header */}
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 shadow-xl">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
+              <DollarSign size={32} />
+              Manajemen Pengeluaran
+            </h1>
+            <p className="text-gray-300">Kelola dan monitor pengeluaran barbershop</p>
+          </div>
+          <button className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center gap-2">
+            <Plus size={20} />
+            Tambah Pengeluaran
+          </button>
         </div>
-        <button className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white font-medium px-6 py-3 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl transform hover:-translate-y-0.5">
-          Tambah Pengeluaran
-        </button>
       </div>
 
-      <div className="bg-gray-800 border border-gray-700 rounded-xl shadow-lg overflow-hidden">
-        <div className="p-6 border-b border-gray-700">
-          <h2 className="text-2xl font-semibold text-white">Daftar Pengeluaran</h2>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Total Pengeluaran</p>
+              <p className="text-2xl font-bold text-red-400">{formatCurrency(totalExpenses)}</p>
+            </div>
+            <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center">
+              <TrendingDown className="text-red-400" size={24} />
+            </div>
+          </div>
         </div>
-        
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-700">
-              <tr>
-                <th className="text-left px-6 py-4 text-sm font-medium text-gray-300">Tanggal</th>
-                <th className="text-left px-6 py-4 text-sm font-medium text-gray-300">Kategori</th>
-                <th className="text-left px-6 py-4 text-sm font-medium text-gray-300">Deskripsi</th>
-                <th className="text-left px-6 py-4 text-sm font-medium text-gray-300">Jumlah</th>
-                <th className="text-left px-6 py-4 text-sm font-medium text-gray-300">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-700">
-              {[
-                { date: '2024-01-15', category: 'Peralatan', description: 'Pembelian Gunting Baru', amount: 500000 },
-                { date: '2024-01-14', category: 'Operasional', description: 'Listrik Bulan Januari', amount: 250000 },
-                { date: '2024-01-13', category: 'Produk', description: 'Stok Pomade & Shampoo', amount: 750000 },
-              ].map((expense, index) => (
-                <tr key={index} className="hover:bg-gray-700/50 transition-colors">
-                  <td className="px-6 py-4 text-white font-medium">{expense.date}</td>
-                  <td className="px-6 py-4 text-gray-300">{expense.category}</td>
-                  <td className="px-6 py-4 text-gray-300">{expense.description}</td>
-                  <td className="px-6 py-4 text-red-400 font-semibold">
-                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(expense.amount)}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2">
-                      <button className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
-                        Edit
-                      </button>
-                      <button className="text-red-400 hover:text-red-300 font-medium transition-colors">
-                        Hapus
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div className="bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Total Transaksi</p>
+              <p className="text-2xl font-bold text-white">{expenses.length}</p>
+            </div>
+            <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+              <DollarSign className="text-blue-400" size={24} />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-700">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-gray-400 text-sm">Rata-rata per Transaksi</p>
+              <p className="text-2xl font-bold text-yellow-400">{formatCurrency(totalExpenses / expenses.length)}</p>
+            </div>
+            <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
+              <DollarSign className="text-yellow-400" size={24} />
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Search */}
+      <div className="bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-700">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <input
+            type="text"
+            placeholder="Cari pengeluaran..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
+
+      {/* Expenses List */}
+      <div className="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
+        <div className="p-6">
+          <h3 className="text-xl font-bold text-white mb-4">Daftar Pengeluaran</h3>
+          <div className="space-y-4">
+            {filteredExpenses.map((expense) => (
+              <div key={expense.id} className="bg-gray-700 rounded-xl p-4 border border-gray-600 hover:border-blue-500 transition-all duration-300">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-white mb-2">{expense.description}</h4>
+                    <div className="flex flex-wrap items-center gap-4 text-sm">
+                      <span className="flex items-center gap-1 text-gray-400">
+                        <Calendar size={16} />
+                        {new Date(expense.date).toLocaleDateString('id-ID')}
+                      </span>
+                      <span className="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs border border-blue-500/30">
+                        {expense.category}
+                      </span>
+                      <span className={`px-2 py-1 rounded text-xs border ${
+                        expense.status === 'Paid' 
+                          ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                          : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+                      }`}>
+                        {expense.status}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <p className="text-2xl font-bold text-red-400">{formatCurrency(expense.amount)}</p>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <button className="bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white p-2 rounded-lg transition-all duration-200">
+                        <Edit3 size={16} />
+                      </button>
+                      <button className="bg-red-600 hover:bg-red-700 text-white p-2 rounded-lg transition-colors duration-200">
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {filteredExpenses.length === 0 && (
+        <div className="bg-gray-800 rounded-2xl p-12 text-center shadow-xl border border-gray-700">
+          <DollarSign className="mx-auto text-gray-500 mb-4" size={64} />
+          <h3 className="text-xl font-bold text-gray-400 mb-2">Tidak ada pengeluaran ditemukan</h3>
+          <p className="text-gray-500">Coba ubah kriteria pencarian Anda</p>
+        </div>
+      )}
     </div>
   );
 };
